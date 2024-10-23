@@ -61,14 +61,23 @@ namespace Fall2024_Assignment3_gdhakal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MovieID,ActorID")] MovieActor movieActor)
         {
-            if (ModelState.IsValid)
+            bool alreadyExists = await _context.MovieActor
+                .AnyAsync(ma => ma.MovieID == movieActor.MovieID && ma.ActorID == movieActor.ActorID);
+
+            if (ModelState.IsValid && !alreadyExists)
             {
                 _context.Add(movieActor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Add an error if the actor has already been added for this movie
+            ModelState.AddModelError("", "Cannot add the same actor multiple times for the same movie");
+
+            // Re-populate the dropdowns in case of validation failure
             ViewData["ActorID"] = new SelectList(_context.Actor, "Id", "Name", movieActor.ActorID);
             ViewData["MovieID"] = new SelectList(_context.Movie, "Id", "Title", movieActor.MovieID);
+
             return View(movieActor);
         }
 

@@ -8,15 +8,18 @@ using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_gdhakal.Data;
 using Fall2024_Assignment3_gdhakal.Models;
 using System.Numerics;
+using Fall2024_Assignment3_gdhakal.Services;
 
 namespace Fall2024_Assignment3_gdhakal.Controllers
 {
     public class MovieController : Controller
     {
+        private readonly AzureOpenAIService _openAIService;
         private readonly ApplicationDbContext _context;
 
-        public MovieController(ApplicationDbContext context)
+        public MovieController(AzureOpenAIService openAIService, ApplicationDbContext context)
         {
+            _openAIService = openAIService;
             _context = context;
         }
 
@@ -41,7 +44,22 @@ namespace Fall2024_Assignment3_gdhakal.Controllers
                 return NotFound();
             }
 
-            return View(movie);
+            var reviewsWithSentiment = await _openAIService.MovieReviewsMultipleCalls(movie.Title, movie.Year);
+
+            // Calculate the average sentiment
+            double averageSentiment = reviewsWithSentiment.Average(r => r.Sentiment);
+
+            // Pass data to the ViewModel
+            var viewModel = new MovieDetailsViewModel
+            {
+                Movie = movie,
+                ReviewsWithSentiment = reviewsWithSentiment,
+                AverageSentiment = averageSentiment
+            };
+
+            // Return the view with the ViewModel
+            return View(viewModel);
+
         }
 
         // GET: Movie/Create

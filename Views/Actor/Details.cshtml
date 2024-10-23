@@ -1,4 +1,4 @@
-﻿@model Fall2024_Assignment3_gdhakal.Models.Actor
+﻿@model Fall2024_Assignment3_gdhakal.Models.ActorDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,36 +11,36 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Actor.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Actor.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
+            @Html.DisplayNameFor(model => model.Actor.Gender)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
+            @Html.DisplayFor(model => model.Actor.Gender)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
+            @Html.DisplayNameFor(model => model.Actor.Age)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Age)
+            @Html.DisplayFor(model => model.Actor.Age)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Imdb)
+            @Html.DisplayNameFor(model => model.Actor.Imdb)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Imdb)
+            @Html.DisplayFor(model => model.Actor.Imdb)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Photo)
+            @Html.DisplayNameFor(model => model.Actor.Photo)
         </dt>
         <dd class = "col-sm-10">
-            @if (Model.Photo != null)
+            @if (Model.Actor.Photo != null)
             {
-                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)" alt="Student Photo" style="max-width: 200px;" />
+                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Actor.Photo)" alt="Student Photo" style="max-width: 200px;" />
             }
             else
             {
@@ -49,7 +49,21 @@
         </dd>
     </dl>
 </div>
+
+<h3>Recent Tweets About @Model.Actor.Name</h3>
+<h4>Average Sentiment: @Model.AverageSentiment</h4>
+
+<ul>
+    @foreach (var tweet in Model.TweetsWithSentiment)
+    {
+        <li>
+            <strong>@tweet.Username:</strong> @tweet.Tweet <br />
+            <strong>Sentiment:</strong> @tweet.Sentiment
+        </li>
+    }
+</ul>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Actor?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_gdhakal.Data;
 using Fall2024_Assignment3_gdhakal.Models;
+using Fall2024_Assignment3_gdhakal.Services;
 
 namespace Fall2024_Assignment3_gdhakal.Controllers
 {
     public class ActorController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AzureOpenAIService _openAIService;
 
-        public ActorController(ApplicationDbContext context)
+        public ActorController(ApplicationDbContext context, AzureOpenAIService openAIService)
         {
             _context = context;
+            _openAIService = openAIService;
         }
 
         // GET: Actor
@@ -38,9 +41,22 @@ namespace Fall2024_Assignment3_gdhakal.Controllers
             if (actor == null)
             {
                 return NotFound();
-            }
+            } 
 
-            return View(actor);
+            var tweetsWithSentiment = await _openAIService.GenerateTweetsForActor(actor.Name);
+            double averageSentiment = tweetsWithSentiment.Any() ? tweetsWithSentiment.Average(t => t.Sentiment) : 0.0;
+
+            // Create the ViewModel and pass the data
+            var viewModel = new ActorDetailsViewModel
+            {
+                Actor = actor,
+                TweetsWithSentiment = tweetsWithSentiment,
+                AverageSentiment = averageSentiment
+            };
+
+            return View(viewModel);
+
+
         }
 
         // GET: Actor/Create
