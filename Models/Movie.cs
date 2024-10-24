@@ -8,6 +8,7 @@
         public string Genre { get; set; }
         public int Year { get; set; }
         public byte[]? Poster { get; set; }
+        public ICollection<MovieActor>? MovieActors { get; set; }
 
     }
 }

@@ -63,6 +63,14 @@
         }
     </ul>
 </div>
+<h3>Actors:</h3>
+<ul>
+    @foreach (var actor in Model.Actors)
+    {
+        <li>@actor.Name</li>
+    }
+</ul>
+
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Movie.Id">Edit</a> |

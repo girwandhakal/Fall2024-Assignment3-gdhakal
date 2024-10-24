@@ -36,13 +36,18 @@ namespace Fall2024_Assignment3_gdhakal.Controllers
                 return NotFound();
             }
 
+            // Load actor with related movies through MovieActor join table
             var actor = await _context.Actor
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(a => a.MovieActors)
+                .ThenInclude(ma => ma.Movie) // Include movies through the join table
+                .FirstOrDefaultAsync(a => a.Id == id);
+
             if (actor == null)
             {
                 return NotFound();
-            } 
+            }
 
+            // Fetch AI-generated tweets with sentiment
             var tweetsWithSentiment = await _openAIService.GenerateTweetsForActor(actor.Name);
             double averageSentiment = tweetsWithSentiment.Any() ? tweetsWithSentiment.Average(t => t.Sentiment) : 0.0;
 
@@ -51,13 +56,13 @@ namespace Fall2024_Assignment3_gdhakal.Controllers
             {
                 Actor = actor,
                 TweetsWithSentiment = tweetsWithSentiment,
-                AverageSentiment = averageSentiment
+                AverageSentiment = averageSentiment,
+                Movies = actor.MovieActors.Select(ma => ma.Movie).ToList()  // Add movies to the ViewModel
             };
 
             return View(viewModel);
-
-
         }
+
 
         // GET: Actor/Create
         public IActionResult Create()

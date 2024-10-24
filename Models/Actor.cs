@@ -12,6 +12,7 @@ namespace Fall2024_Assignment3_gdhakal.Models
         public int Age { get; set; }
         public string Imdb { get; set; }
         public byte[]? Photo { get; set; }
+        public ICollection<MovieActor>? MovieActors { get; set; }
 
     }
 }

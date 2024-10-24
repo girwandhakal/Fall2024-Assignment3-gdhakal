@@ -37,30 +37,36 @@ namespace Fall2024_Assignment3_gdhakal.Controllers
                 return NotFound();
             }
 
+            // Load movie with related actors through MovieActor join table
             var movie = await _context.Movie
+                .Include(m => m.MovieActors)
+                .ThenInclude(ma => ma.Actor)  // Include actors through the join table
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
             }
 
+            // Fetch AI-generated reviews with sentiment
             var reviewsWithSentiment = await _openAIService.MovieReviewsMultipleCalls(movie.Title, movie.Year);
 
             // Calculate the average sentiment
-            double averageSentiment = reviewsWithSentiment.Average(r => r.Sentiment);
+            double averageSentiment = reviewsWithSentiment.Any() ? reviewsWithSentiment.Average(r => r.Sentiment) : 0.0;
 
-            // Pass data to the ViewModel
+            // Create the ViewModel and pass the data
             var viewModel = new MovieDetailsViewModel
             {
                 Movie = movie,
                 ReviewsWithSentiment = reviewsWithSentiment,
-                AverageSentiment = averageSentiment
+                AverageSentiment = averageSentiment,
+                Actors = movie.MovieActors.Select(ma => ma.Actor).ToList()  // Add actors to the ViewModel
             };
 
             // Return the view with the ViewModel
             return View(viewModel);
-
         }
+
 
         // GET: Movie/Create
         public IActionResult Create()
