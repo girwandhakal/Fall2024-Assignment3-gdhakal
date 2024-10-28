@@ -53,16 +53,37 @@
 <h3>Recent Tweets About @Model.Actor.Name</h3>
 <h4>Average Sentiment: @Model.AverageSentiment</h4>
 
-<ul>
+
+<table>
+
+        <tr>
+            <th>
+                Username
+            </th>
+            <th>
+                Tweet
+            </th>
+            <th>
+                Sentiment
+            </th>
+        </tr>
     @foreach (var tweet in Model.TweetsWithSentiment)
     {
-        <li>
-            <strong>@tweet.Username:</strong> @tweet.Tweet <br />
-            <strong>Sentiment:</strong> @tweet.Sentiment
-        </li>
+        <tr>
+            <td>
+            @tweet.Username
+        </td>
+        <td>
+            @tweet.Tweet
+        </td>
+        <td>
+            @tweet.Sentiment
+        </td>
+    </tr>
     }
-</ul>
+</table>
 <h3>Movies:</h3>
+
 <ul>
     @foreach (var movie in Model.Movies)
     {

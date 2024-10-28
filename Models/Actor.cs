@@ -10,6 +10,9 @@ namespace Fall2024_Assignment3_gdhakal.Models
         [Required]
         public string Gender { get; set; }
         public int Age { get; set; }
+
+        [RegularExpression(@"^https:\/\/www\.imdb\.com\/.*$",
+    ErrorMessage = "The IMDb link must start with 'https://www.imdb.com/'")]
         public string Imdb { get; set; }
         public byte[]? Photo { get; set; }
         public ICollection<MovieActor>? MovieActors { get; set; }

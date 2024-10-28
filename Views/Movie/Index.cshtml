@@ -36,9 +36,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Imdb)
-            </td>
+                <td>
+                    <a href="@item.Imdb" target="_blank">@Html.DisplayFor(modelItem => item.Imdb)</a>
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Genre)
             </td>

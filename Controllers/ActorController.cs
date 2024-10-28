@@ -37,7 +37,7 @@ namespace Fall2024_Assignment3_gdhakal.Controllers
             }
 
             // Load actor with related movies through MovieActor join table
-            var actor = await _context.Actor
+            var actor = await   _context.Actor
                 .Include(a => a.MovieActors)
                 .ThenInclude(ma => ma.Movie) // Include movies through the join table
                 .FirstOrDefaultAsync(a => a.Id == id);

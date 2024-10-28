@@ -50,19 +50,27 @@
     </dl>
 </div>
 <div>
-
     <h4>Average Sentiment: @Model.AverageSentiment</h4>
 
-    <ul>
-        @foreach (var review in Model.ReviewsWithSentiment)
-        {
-            <li>
-                <strong>Review:</strong> @review.Review <br />
-                <strong>Sentiment Score:</strong> @review.Sentiment
-            </li>
-        }
-    </ul>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Review</th>
+                <th>Sentiment Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model.ReviewsWithSentiment)
+            {
+                <tr>
+                    <td>@review.Review</td>
+                    <td>@review.Sentiment</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
 <h3>Actors:</h3>
 <ul>
     @foreach (var actor in Model.Actors)
